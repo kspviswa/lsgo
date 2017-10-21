@@ -5,12 +5,26 @@ import (
 	"os"
 )
 
-func main() {
-	fmt.Println("My first golang code...")
-	fmt.Println("Implementing ls in golang...")
-	f, _ := os.OpenFile(".", os.O_RDONLY, 0666)
-	files, _ := f.Readdirnames(0)
+func checkerr(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+
+func serveDir(dir string) {
+	f, err := os.OpenFile(dir, os.O_RDONLY, 0666)
+	checkerr(err)
+	files, err := f.Readdirnames(0)
+	checkerr(err)
 	for _, file := range files {
 		fmt.Println(file)
+	}
+}
+
+func main() {
+	if len(os.Args) > 1 {
+		serveDir(os.Args[1])
+	} else {
+		serveDir(".")
 	}
 }
