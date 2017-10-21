@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/urfave/cli"
 )
@@ -25,14 +26,22 @@ func serveDir(dir string) {
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "ls ( go implemenetation )"
+	app.Name = "ls ( implemented in golang )"
 	app.Usage = "ls <flags> <args>"
 	app.Author = "Viswanath Kumar Skand Priya"
 	app.Email = "kspviswa.github@gmail.com"
 	app.Version = "0.1"
+	app.Copyright = "MIT Licensed"
+	app.Compiled = time.Now()
 	app.Flags = []cli.Flag{
-		cli.BoolFlag{Name: "l, long"},
-		cli.BoolFlag{Name: "d, dronly"},
+		cli.BoolFlag{
+			Name:  "l, long",
+			Usage: "include extended information",
+		},
+		cli.BoolFlag{
+			Name:  "d, dronly",
+			Usage: "include only directories",
+		},
 	}
 	app.Commands = []cli.Command{
 		{
