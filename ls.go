@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strconv"
-	//"strconv"
 	"time"
 
 	"code.cloudfoundry.org/bytefmt"
@@ -17,7 +17,15 @@ type flagdef struct {
 	isDronly bool
 	isFOnly  bool
 	isHr     bool
+	isTree   bool
 }
+
+type fileRef struct {
+	path string
+	name string
+}
+
+var walk []fileRef
 
 func checkerr(err error) {
 	if err != nil {
@@ -30,6 +38,39 @@ func retsize(nsize int64, hr bool) string {
 		return bytefmt.ByteSize(uint64(nsize))
 	}
 	return fmt.Sprintf("%v", nsize)
+}
+
+func inspect(spath string, finfo os.FileInfo, err error) error {
+	var sname string
+	if err != nil {
+		sname = err.Error()
+	}
+	sname = finfo.Name()
+	foo := fileRef{path: spath, name: sname}
+	walk = append(walk, foo)
+	return nil
+}
+
+func serveDecoratedDirTree(dir string) {
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"Path", "Name"})
+	dirname := dir
+
+	err := filepath.Walk(dir, inspect)
+	checkerr(err)
+
+	for _, item := range walk {
+		dirname = item.path
+		data := []string{
+			filepath.Dir(dirname),
+			item.name,
+		}
+		table.Append(data)
+	}
+	table.SetAutoMergeCells(true)
+	table.SetAutoWrapText(true)
+	table.SetRowLine(true)
+	table.Render()
 }
 
 func serveDecoratedDir(dir string, flags flagdef) {
@@ -92,29 +133,27 @@ func main() {
 			Usage: "include only regular files",
 		},
 		cli.BoolFlag{
-			Name:  "hr",
+			Name:  "hr, humanfriendly",
 			Usage: "view size in humar readable format",
 		},
-	}
-	app.Commands = []cli.Command{
-		{
-			Name:    "tree",
-			Aliases: []string{"tr"},
-			Usage:   "perform recursive directory lookup",
-			Action: func(c *cli.Context) error {
-				return nil
-			},
+		cli.BoolFlag{
+			Name:  "t, tree",
+			Usage: "view tree structure ( recursive lookup )",
 		},
 	}
 	app.Action = func(c *cli.Context) error {
-		decor := c.Bool("long") || c.Bool("dronly") || c.Bool("fileonly") || c.Bool("hr")
-		flags := flagdef{c.Bool("long"), c.Bool("dronly"), c.Bool("fileonly"), c.Bool("hr")}
+		decor := c.Bool("long") || c.Bool("dronly") || c.Bool("fileonly") || c.Bool("hr") || c.Bool("t")
+		flags := flagdef{c.Bool("long"), c.Bool("dronly"), c.Bool("fileonly"), c.Bool("hr"), c.Bool("t")}
 		dir := "."
 		if c.NArg() > 0 {
 			dir = c.Args()[0]
 		}
 		if decor {
-			serveDecoratedDir(dir, flags)
+			if flags.isTree {
+				serveDecoratedDirTree(dir)
+			} else {
+				serveDecoratedDir(dir, flags)
+			}
 		} else {
 			serveDir(dir)
 		}
