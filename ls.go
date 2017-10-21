@@ -27,7 +27,7 @@ func serveDir(dir string) {
 func main() {
 	app := cli.NewApp()
 	app.Name = "ls ( implemented in golang )"
-	app.Usage = "ls <flags> <args>"
+	app.Usage = "ls [flags] [command][args]"
 	app.Author = "Viswanath Kumar Skand Priya"
 	app.Email = "kspviswa.github@gmail.com"
 	app.Version = "0.1"
