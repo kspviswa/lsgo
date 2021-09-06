@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -9,6 +8,7 @@ import (
 
 	"code.cloudfoundry.org/bytefmt"
 	"github.com/olekukonko/tablewriter"
+	flag "github.com/spf13/pflag"
 )
 
 type flagdef struct {
@@ -120,25 +120,35 @@ func main() {
 
 	var longB, drB, fB, hrB, tB bool
 
-	// long format
-	flag.BoolVar(&longB, "long", false, "include extended information")
-	flag.BoolVar(&longB, "l", false, "include extended information")
+	flag.BoolVarP(&longB, "long", "l", false, "include extended information")
+	flag.BoolVarP(&drB, "dronly", "d", false, "include only directories")
+	flag.BoolVarP(&fB, "fileonly", "f", false, "include only regular files")
+	flag.BoolVarP(&longB, "humanfriendly", "r", false, "view size in human readableformat")
+	flag.BoolVarP(&longB, "tree", "t", false, "view tree structure ( recursive lookup ) ")
 
-	// Drive only format
-	flag.BoolVar(&drB, "d", false, "include only directories")
-	flag.BoolVar(&drB, "dronly", false, "include only directories")
+	// Using the posix compliant p-flag version
 
-	// File only format
-	flag.BoolVar(&fB, "f", false, "include only regular files")
-	flag.BoolVar(&fB, "fileonly", false, "include only regular files")
+	/*
+		// long format
+		flag.BoolVar(&longB, "long", false, "include extended information")
+		flag.BoolVar(&longB, "l", false, "include extended information")
 
-	// Human readable format
-	flag.BoolVar(&hrB, "hr", false, "view size in humar readable format")
-	flag.BoolVar(&hrB, "humanfriendly", false, "view size in humar readable format")
+		// Drive only format
+		flag.BoolVar(&drB, "d", false, "include only directories")
+		flag.BoolVar(&drB, "dronly", false, "include only directories")
 
-	// Tree recursive format
-	flag.BoolVar(&tB, "t", false, "view tree structure ( recursive lookup )")
-	flag.BoolVar(&tB, "tree", false, "view tree structure ( recursive lookup )")
+		// File only format
+		flag.BoolVar(&fB, "f", false, "include only regular files")
+		flag.BoolVar(&fB, "fileonly", false, "include only regular files")
+
+		// Human readable format
+		flag.BoolVar(&hrB, "hr", false, "view size in humar readable format")
+		flag.BoolVar(&hrB, "humanfriendly", false, "view size in humar readable format")
+
+		// Tree recursive format
+		flag.BoolVar(&tB, "t", false, "view tree structure ( recursive lookup )")
+		flag.BoolVar(&tB, "tree", false, "view tree structure ( recursive lookup )")
+	*/
 
 	// Set help
 	/**
