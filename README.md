@@ -17,7 +17,7 @@ VERSION:
    0.1
 
 AUTHOR:
-   Viswanath Kumar Skand Priya <kspviswa.github@gmail.com>
+   Viswa Kumar
 
 COMMANDS:
      help, h  Shows a list of commands or help for one command
@@ -50,7 +50,3 @@ COPYRIGHT:
 | README.md | 166B   | -rwxrwxrwx | 2017-10-22 01:11:07 | false |
 +-----------+--------+------------+---------------------+-------+
 ```
-
-### Full feature demo
-
-[![asciicast](https://asciinema.org/a/66oqlLrbMehCGcgYxh06lYJs6.png)](https://asciinema.org/a/66oqlLrbMehCGcgYxh06lYJs6)
