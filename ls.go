@@ -114,8 +114,8 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "ls ( implemented in golang )"
 	app.Usage = "ls [flags] [command][args]"
-	app.Author = "Viswanath Kumar Skand Priya"
-	app.Email = "kspviswa.github@gmail.com"
+	app.Author = "Viswa Kumar"
+	app.Email = ""
 	app.Version = "0.1"
 	app.Copyright = "MIT Licensed"
 	app.Compiled = time.Now()
